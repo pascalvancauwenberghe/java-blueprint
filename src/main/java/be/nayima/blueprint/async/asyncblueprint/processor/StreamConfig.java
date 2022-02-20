@@ -1,7 +1,7 @@
-package be.nayima.blueprint.async.asyncblueprint.config;
+package be.nayima.blueprint.async.asyncblueprint.processor;
 
 import be.nayima.blueprint.async.asyncblueprint.message.BasicJob;
-import be.nayima.blueprint.async.asyncblueprint.processor.BasicJobExecutor;
+import be.nayima.blueprint.async.asyncblueprint.message.DroppableJob;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,8 +10,9 @@ import java.util.function.Consumer;
 @Configuration
 public class StreamConfig {
     @Bean
-    public Consumer<BasicJob> processor(BasicJobExecutor service) {
+    public Consumer<DroppableJob<BasicJob>> basicjobProcessor(BasicJobExecutor service) {
         return service::process;
     }
+
 }
 

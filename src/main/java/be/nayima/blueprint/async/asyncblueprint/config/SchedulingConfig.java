@@ -11,4 +11,5 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ConfigurationProperties(prefix = "blueprint.schedules")
 public class SchedulingConfig {
     private String basicJobCreationSchedule;
+    private int basicJobCreationTtl;
 }

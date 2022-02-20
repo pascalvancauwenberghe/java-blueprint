@@ -1,15 +1,16 @@
 package be.nayima.blueprint.async.asyncblueprint.message;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 import java.time.Instant;
 
 @Data
-@SuperBuilder
+@Builder
 @Jacksonized
-public class DroppableJob {
+public class DroppableJob<Body> {
     public Instant ttl;
     public String name;
+    public Body body;
 }

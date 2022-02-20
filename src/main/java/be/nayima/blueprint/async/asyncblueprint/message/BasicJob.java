@@ -9,9 +9,8 @@ import lombok.extern.jackson.Jacksonized;
 import java.time.Instant;
 
 @Data
-@SuperBuilder
+@Builder
 @Jacksonized
-@EqualsAndHashCode(callSuper=true)
-public class BasicJob extends DroppableJob {
+public class BasicJob {
     public String body;
 }
