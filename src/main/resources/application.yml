@@ -1,0 +1,21 @@
+blueprint:
+  schedules:
+    basic-job-creation-schedule: "*/1 * * * * *"
+spring:
+  main:
+    banner-mode: off
+  cloud:
+    stream:
+      function:
+        definition: processor
+      bindings:
+        processor-in-0:
+          destination: "Blueprint.Scheduled.BasicJobs"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
