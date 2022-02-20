@@ -1,7 +1,7 @@
-package be.nayima.blueprint.async.asyncblueprint.processor;
+package be.nayima.blueprint.async.asyncblueprint.processor.generic;
 
-import be.nayima.blueprint.async.asyncblueprint.message.DroppableJob;
-import be.nayima.blueprint.async.asyncblueprint.usecase.IPerformDroppableWork;
+import be.nayima.blueprint.async.asyncblueprint.message.generic.DroppableJob;
+import be.nayima.blueprint.async.asyncblueprint.usecase.generic.IPerformDroppableWork;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

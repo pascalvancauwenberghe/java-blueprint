@@ -1,4 +1,4 @@
-package be.nayima.blueprint.async.asyncblueprint.config;
+package be.nayima.blueprint.async.asyncblueprint.scheduler;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

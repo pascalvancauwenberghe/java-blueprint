@@ -1,7 +1,7 @@
 blueprint:
   schedules:
     basic-job-creation-schedule: "*/1 * * * * *"
-    basic-job-creation-ttl: 1
+    basic-job-creation-ttl: 2
     basic-job-processing-interval: 4
 spring:
   main:
@@ -11,9 +11,12 @@ spring:
       function:
         definition: basicjob-processor
         bindings:
-          basicjob-processor-in-0: basicjobs
+          basicjob-processor-in-0: basicjobsIn
       bindings:
-        basicjobs:
+        basicjobsOut:
+          destination: "Blueprint.Scheduled"
+          group: "BasicJobs"
+        basicjobsIn:
           destination: "Blueprint.Scheduled"
           group: "BasicJobs"
           consumer:
@@ -22,9 +25,6 @@ spring:
             autoBindDlq: false
             exclusive: true
             singleActiveConsumer: true
-        basicjobsOut:
-          destination: "Blueprint.Scheduled"
-          group: "BasicJobs"
 management:
   endpoints:
     web:

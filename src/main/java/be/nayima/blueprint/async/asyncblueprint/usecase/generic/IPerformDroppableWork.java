@@ -1,4 +1,4 @@
-package be.nayima.blueprint.async.asyncblueprint.usecase;
+package be.nayima.blueprint.async.asyncblueprint.usecase.generic;
 
 public interface IPerformDroppableWork<Job> {
 

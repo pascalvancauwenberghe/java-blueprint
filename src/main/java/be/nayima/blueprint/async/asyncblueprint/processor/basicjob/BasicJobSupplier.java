@@ -1,13 +1,13 @@
-package be.nayima.blueprint.async.asyncblueprint.processor;
+package be.nayima.blueprint.async.asyncblueprint.processor.basicjob;
 
-import be.nayima.blueprint.async.asyncblueprint.message.DroppableJob;
-import be.nayima.blueprint.async.asyncblueprint.usecase.CreateBasicJob;
+import be.nayima.blueprint.async.asyncblueprint.message.basicjob.BasicJob;
+import be.nayima.blueprint.async.asyncblueprint.message.generic.DroppableJob;
+import be.nayima.blueprint.async.asyncblueprint.usecase.basicjob.CreateBasicJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -23,11 +23,12 @@ public class BasicJobSupplier {
     private final StreamBridge streamBridge;
     private final CreateBasicJob creator;
 
-    public void supplyJob(Duration ttl) {
+    public void supplyJob(Instant expiresAt) {
+        var basicJob = creator.create();
         var job = DroppableJob.builder()
                 .name("BasicJob")
-                .ttl(Instant.now().plus(ttl))
-                .body(creator.create()).build();
+                .ttl(expiresAt)
+                .body(basicJob).build();
         log.info("Sending message {} which expires at {}", job.getName(), formatter.format(job.getTtl()));
         streamBridge.send(OUTPUT_BINDING, job);
     }

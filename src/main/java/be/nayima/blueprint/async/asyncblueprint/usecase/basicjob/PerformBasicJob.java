@@ -1,7 +1,8 @@
-package be.nayima.blueprint.async.asyncblueprint.usecase;
+package be.nayima.blueprint.async.asyncblueprint.usecase.basicjob;
 
-import be.nayima.blueprint.async.asyncblueprint.config.SchedulingConfig;
-import be.nayima.blueprint.async.asyncblueprint.message.BasicJob;
+import be.nayima.blueprint.async.asyncblueprint.scheduler.SchedulingConfig;
+import be.nayima.blueprint.async.asyncblueprint.message.basicjob.BasicJob;
+import be.nayima.blueprint.async.asyncblueprint.usecase.generic.IPerformDroppableWork;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     private final SchedulingConfig config;
-
+    
     @Override
     public void perform(BasicJob in) {
 
