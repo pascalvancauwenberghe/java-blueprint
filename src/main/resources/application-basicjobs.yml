@@ -1,7 +1,9 @@
 blueprint:
   schedules:
-    basic-job-creation-schedule: "*/1 * * * * *"
-    basic-job-creation-ttl: 2
+    basic-job-creation-schedule: "*/2 * * * * *"
+    basic-job-creation-ttl: 1
+    basic-job-batch-creation-schedule: "*/5 * * * * *"
+    basic-job-batch-creation-ttl: 4
     basic-job-processing-interval: 4
 spring:
   cloud:

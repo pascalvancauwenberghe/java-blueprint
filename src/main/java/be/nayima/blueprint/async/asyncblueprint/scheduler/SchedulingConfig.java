@@ -14,6 +14,8 @@ public class SchedulingConfig {
     private String basicJobCreationSchedule;
     // TTL for the BasicJobs on the queue
     private int basicJobCreationTtl;
+    // TTL for the BasicJobs that have been added in batch on the queue
+    private int basicJobBatchCreationTtl;
     // How many seconds it takes to process one BasicJob. Set this higher than the frequency of the CRON schedule and the TTL to mimic fast producer-slow consumer
     private int basicJobProcessingInterval;
 }

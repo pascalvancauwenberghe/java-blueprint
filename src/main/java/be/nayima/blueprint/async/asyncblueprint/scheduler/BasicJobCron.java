@@ -18,9 +18,16 @@ public class BasicJobCron {
     private final BasicJobSupplier supplier;
     private final SchedulingConfig config;
 
+    // Add one job at a time
     @Scheduled(cron = "${blueprint.schedules.basic-job-creation-schedule}")
     public void generateJob() {
         supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(config.getBasicJobCreationTtl())));
+    }
+
+    // Add a batch of 5-10 jobs
+    @Scheduled(cron = "${blueprint.schedules.basic-job-batch-creation-schedule}")
+    public void generateManyJobs() {
+        supplier.supplyManyJobs(Instant.now().plus(Duration.ofSeconds(config.getBasicJobBatchCreationTtl())));
     }
 
 }

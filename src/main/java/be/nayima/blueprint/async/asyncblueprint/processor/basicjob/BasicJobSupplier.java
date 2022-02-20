@@ -31,6 +31,15 @@ public class BasicJobSupplier {
         sendBasicJob(basicJob, expiresAt);
     }
 
+    public void supplyManyJobs(Instant expiresAt) {
+        var jobs = creator.createBatch();
+        log.info("Sending {} messages in batch", jobs.size());
+        for (BasicJob job : jobs) {
+            sendBasicJob(job, expiresAt);
+        }
+
+    }
+
     private void sendBasicJob(BasicJob basicJob, Instant expiresAt) {
         var job = DroppableJob.builder()
                 .name("BasicJob")
@@ -39,4 +48,5 @@ public class BasicJobSupplier {
         log.info("Sending message {} which expires at {}", job.getName(), formatter.format(job.getTtl()));
         streamBridge.send(OUTPUT_BINDING, job);
     }
+
 }
