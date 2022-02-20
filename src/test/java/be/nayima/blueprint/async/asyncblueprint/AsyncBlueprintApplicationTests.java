@@ -30,13 +30,13 @@ class AsyncBlueprintApplicationTests {
 
     @Test
     void InjectBasicJob() {
-        supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(5)));
-        supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(5)));
-        supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(5)));
-        supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(5)));
+        final int numberOfMessagesSent = 4;
+        for (int i = 0; i < numberOfMessagesSent; i++) {
+            supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(5)));
+        }
 
-        Assert.assertEquals(4, performer.getMessages());
-        Assert.assertEquals(4, performer.getMessagesPerformed() + performer.getMessagesDropped());
+        Assert.assertEquals(numberOfMessagesSent, performer.getMessages());
+        Assert.assertEquals(numberOfMessagesSent, performer.getMessagesPerformed() + performer.getMessagesDropped());
 
     }
 
