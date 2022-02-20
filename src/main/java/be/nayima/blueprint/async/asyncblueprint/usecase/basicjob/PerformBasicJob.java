@@ -3,6 +3,7 @@ package be.nayima.blueprint.async.asyncblueprint.usecase.basicjob;
 import be.nayima.blueprint.async.asyncblueprint.scheduler.SchedulingConfig;
 import be.nayima.blueprint.async.asyncblueprint.message.basicjob.BasicJob;
 import be.nayima.blueprint.async.asyncblueprint.usecase.generic.IPerformDroppableWork;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,13 @@ import org.springframework.stereotype.Component;
 public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     private final SchedulingConfig config;
 
+    @Getter
+    private int messages = 0;
+    @Getter
+    private int messagesDropped = 0;
+    @Getter
+    private int messagesPerformed = 0;
+
     // Perform the work of processing the BasicJob.
     // This should not throw exceptions
     // This may take some time
@@ -20,6 +28,8 @@ public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     public void perform(BasicJob in) {
 
         // Do the work
+        messages += 1;
+        messagesPerformed += 1;
         log.info("Done with {}. Feeling sleepy after all that work... Sleeping {} seconds", in.getBody(), config.getBasicJobProcessingInterval());
         try {
             Thread.sleep(config.getBasicJobProcessingInterval() * 1000L);
@@ -35,5 +45,7 @@ public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     @Override
     public void drop(BasicJob in) {
         // Doing nothing is pretty fast
+        messages += 1;
+        messagesDropped += 1;
     }
 }

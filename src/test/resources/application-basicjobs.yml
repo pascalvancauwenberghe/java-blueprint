@@ -1,0 +1,28 @@
+blueprint:
+  schedules:
+    basic-job-creation-schedule: "*/2 * * * * *"
+    basic-job-creation-ttl: 1
+    basic-job-batch-creation-schedule: "*/5 * * * * *"
+    basic-job-batch-creation-ttl: 4
+    basic-job-processing-interval: 1
+spring:
+  cloud:
+    stream:
+      function:
+        definition: basicjob-processor
+        bindings:
+          basicjob-processor-in-0: basicjobsIn
+      bindings:
+        basicjobsOut:
+          destination: "Blueprint.Scheduled"
+          group: "BasicJobs"
+        basicjobsIn:
+          destination: "Blueprint.Scheduled"
+          group: "BasicJobs"
+          consumer:
+            max-attempts: 1
+            concurrency: 1
+            autoBindDlq: false
+            exclusive: true
+            singleActiveConsumer: true
+
