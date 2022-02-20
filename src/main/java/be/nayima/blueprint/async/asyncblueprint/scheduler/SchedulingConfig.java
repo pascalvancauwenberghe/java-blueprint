@@ -10,7 +10,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @ConfigurationProperties(prefix = "blueprint.schedules")
 public class SchedulingConfig {
+    // CRON schedule for putting BasicJob onto the queue
     private String basicJobCreationSchedule;
+    // TTL for the BasicJobs on the queue
     private int basicJobCreationTtl;
+    // How many seconds it takes to process one BasicJob. Set this higher than the frequency of the CRON schedule and the TTL to mimic fast producer-slow consumer
     private int basicJobProcessingInterval;
 }

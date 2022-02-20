@@ -8,6 +8,8 @@ import java.util.UUID;
 @Component
 public class CreateBasicJob {
 
+    // This creates new jobs by performing some business logic to determine which job(s) need to be done
+    // Just create some random BasicJob
     public BasicJob create() {
         return BasicJob.builder().body(UUID.randomUUID().toString()).build();
     }

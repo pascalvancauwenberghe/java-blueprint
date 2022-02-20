@@ -12,7 +12,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     private final SchedulingConfig config;
-    
+
+    // Perform the work of processing the BasicJob.
+    // This should not throw exceptions
+    // This may take some time
     @Override
     public void perform(BasicJob in) {
 
@@ -25,8 +28,11 @@ public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
         log.info("Waking up refreshed...");
     }
 
+    // Handle the case where the job's TTL has expired
+    // This should not throw exceptions
+    // This should be fast, because if there's a big backlog, we want to clear it quickly to get to the fresh work
     @Override
     public void drop(BasicJob in) {
-
+        // Doing nothing is pretty fast
     }
 }
