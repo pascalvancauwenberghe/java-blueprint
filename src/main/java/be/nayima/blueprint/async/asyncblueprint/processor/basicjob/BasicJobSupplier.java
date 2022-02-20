@@ -43,9 +43,9 @@ public class BasicJobSupplier {
     private void sendBasicJob(BasicJob basicJob, Instant expiresAt) {
         var job = DroppableJob.builder()
                 .name("BasicJob")
-                .ttl(expiresAt)
+                .expiresAt(expiresAt)
                 .body(basicJob).build();
-        log.info("Sending message {} which expires at {}", job.getName(), formatter.format(job.getTtl()));
+        log.info("Sending message {} which expires at {}", job.getName(), formatter.format(job.getExpiresAt()));
         streamBridge.send(OUTPUT_BINDING, job);
     }
 

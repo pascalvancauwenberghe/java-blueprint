@@ -10,7 +10,7 @@ import java.time.Instant;
 @Builder
 @Jacksonized
 public class DroppableJob<Body> {
-    public Instant ttl;
+    public Instant expiresAt;
     public String name;
     public Body body;
 }

@@ -19,6 +19,7 @@ public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     @Override
     public void perform(BasicJob in) {
 
+        // Do the work
         log.info("Done with {}. Feeling sleepy after all that work... Sleeping {} seconds", in.getBody(), config.getBasicJobProcessingInterval());
         try {
             Thread.sleep(config.getBasicJobProcessingInterval() * 1000L);
@@ -30,7 +31,7 @@ public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
 
     // Handle the case where the job's TTL has expired
     // This should not throw exceptions
-    // This should be fast, because if there's a big backlog, we want to clear it quickly to get to the fresh work
+    // This should be fast, because if there's a big backlog of 'stale', we want to clear it quickly to get to the 'fresh' work
     @Override
     public void drop(BasicJob in) {
         // Doing nothing is pretty fast
