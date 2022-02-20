@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 @Configuration
 public class StreamConfig {
     @Bean
-    public Consumer<DroppableJob<BasicJob>> basicjobProcessor(BasicJobExecutor service) {
+    public Consumer<DroppableJob<BasicJob>> basicjobProcessor(DroppableJobExecutor<BasicJob> service) {
         return service::process;
     }
 

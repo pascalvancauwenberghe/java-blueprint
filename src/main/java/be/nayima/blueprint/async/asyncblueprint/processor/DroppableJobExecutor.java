@@ -1,8 +1,7 @@
 package be.nayima.blueprint.async.asyncblueprint.processor;
 
-import be.nayima.blueprint.async.asyncblueprint.message.BasicJob;
 import be.nayima.blueprint.async.asyncblueprint.message.DroppableJob;
-import be.nayima.blueprint.async.asyncblueprint.usecase.PerformBasicJob;
+import be.nayima.blueprint.async.asyncblueprint.usecase.IPerformDroppableWork;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,11 +14,11 @@ import java.time.format.DateTimeFormatter;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BasicJobExecutor {
-    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
-    private final PerformBasicJob performer;
+public class DroppableJobExecutor<Job> {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
+    private final IPerformDroppableWork<Job> performer;
 
-    public void process(DroppableJob<BasicJob> in) {
+    public void process(DroppableJob<Job> in) {
         var now = Instant.now();
         var expired = now.isAfter(in.getTtl());
 

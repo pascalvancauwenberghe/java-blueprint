@@ -12,4 +12,5 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class SchedulingConfig {
     private String basicJobCreationSchedule;
     private int basicJobCreationTtl;
+    private int basicJobProcessingInterval;
 }

@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class BasicJobSupplier {
     public static final String OUTPUT_BINDING = "basicjobsOut";
-    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
 
     private final StreamBridge streamBridge;
     private final CreateBasicJob creator;
