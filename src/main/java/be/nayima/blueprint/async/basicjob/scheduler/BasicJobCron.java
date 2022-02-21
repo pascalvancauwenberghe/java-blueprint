@@ -1,6 +1,6 @@
-package be.nayima.blueprint.async.asyncblueprint.scheduler;
+package be.nayima.blueprint.async.basicjob.scheduler;
 
-import be.nayima.blueprint.async.asyncblueprint.processor.basicjob.BasicJobSupplier;
+import be.nayima.blueprint.async.basicjob.processor.BasicJobSupplier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;

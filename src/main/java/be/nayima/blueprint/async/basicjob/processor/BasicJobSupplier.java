@@ -1,8 +1,8 @@
-package be.nayima.blueprint.async.asyncblueprint.processor.basicjob;
+package be.nayima.blueprint.async.basicjob.processor;
 
-import be.nayima.blueprint.async.asyncblueprint.message.basicjob.BasicJob;
-import be.nayima.blueprint.async.asyncblueprint.message.generic.DroppableJob;
-import be.nayima.blueprint.async.asyncblueprint.usecase.basicjob.CreateBasicJob;
+import be.nayima.blueprint.async.basicjob.message.BasicJob;
+import be.nayima.blueprint.async.generic.message.DroppableJob;
+import be.nayima.blueprint.async.basicjob.usecase.CreateBasicJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;

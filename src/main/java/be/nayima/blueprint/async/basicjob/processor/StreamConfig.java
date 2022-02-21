@@ -1,9 +1,9 @@
-package be.nayima.blueprint.async.asyncblueprint.processor;
+package be.nayima.blueprint.async.basicjob.processor;
 
-import be.nayima.blueprint.async.asyncblueprint.message.basicjob.BasicJob;
-import be.nayima.blueprint.async.asyncblueprint.message.generic.DroppableJob;
-import be.nayima.blueprint.async.asyncblueprint.processor.generic.DroppableJobExecutor;
-import be.nayima.blueprint.async.asyncblueprint.usecase.basicjob.PerformBasicJob;
+import be.nayima.blueprint.async.basicjob.message.BasicJob;
+import be.nayima.blueprint.async.generic.message.DroppableJob;
+import be.nayima.blueprint.async.generic.processor.DroppableJobExecutor;
+import be.nayima.blueprint.async.basicjob.usecase.PerformBasicJob;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

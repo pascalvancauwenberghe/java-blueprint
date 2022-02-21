@@ -1,6 +1,6 @@
-package be.nayima.blueprint.async.asyncblueprint.usecase.basicjob;
+package be.nayima.blueprint.async.basicjob.usecase;
 
-import be.nayima.blueprint.async.asyncblueprint.message.basicjob.BasicJob;
+import be.nayima.blueprint.async.basicjob.message.BasicJob;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

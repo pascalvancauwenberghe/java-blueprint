@@ -1,8 +1,8 @@
-package be.nayima.blueprint.async.asyncblueprint.usecase.basicjob;
+package be.nayima.blueprint.async.basicjob.usecase;
 
-import be.nayima.blueprint.async.asyncblueprint.scheduler.SchedulingConfig;
-import be.nayima.blueprint.async.asyncblueprint.message.basicjob.BasicJob;
-import be.nayima.blueprint.async.asyncblueprint.usecase.generic.IPerformDroppableWork;
+import be.nayima.blueprint.async.basicjob.scheduler.SchedulingConfig;
+import be.nayima.blueprint.async.basicjob.message.BasicJob;
+import be.nayima.blueprint.async.generic.usecase.IPerformDroppableWork;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

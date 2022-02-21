@@ -1,4 +1,4 @@
-package be.nayima.blueprint.async.asyncblueprint.message.basicjob;
+package be.nayima.blueprint.async.basicjob.message;
 
 import lombok.Builder;
 import lombok.Data;
