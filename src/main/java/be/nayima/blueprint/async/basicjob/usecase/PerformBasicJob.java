@@ -1,6 +1,6 @@
 package be.nayima.blueprint.async.basicjob.usecase;
 
-import be.nayima.blueprint.async.basicjob.scheduler.SchedulingConfig;
+import be.nayima.blueprint.async.basicjob.connector.IExternalParty;
 import be.nayima.blueprint.async.basicjob.message.BasicJob;
 import be.nayima.blueprint.async.generic.usecase.IPerformDroppableWork;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
-    private final SchedulingConfig config;
+    private final IExternalParty externalParty;
 
     @Getter
     private int messages = 0;
@@ -26,17 +26,12 @@ public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     // This may take some time
     @Override
     public void perform(BasicJob in) {
-
         // Do the work
+        externalParty.call(in.getBody());
+
         messages += 1;
         messagesPerformed += 1;
-        log.info("Done with {}. Feeling sleepy after all that work... Sleeping {} seconds", in.getBody(), config.getBasicJobProcessingInterval());
-        try {
-            Thread.sleep(config.getBasicJobProcessingInterval() * 1000L);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        log.info("Waking up refreshed...");
+
     }
 
     // Handle the case where the job's TTL has expired
@@ -45,6 +40,7 @@ public class PerformBasicJob implements IPerformDroppableWork<BasicJob> {
     @Override
     public void drop(BasicJob in) {
         // Doing nothing is pretty fast
+
         messages += 1;
         messagesDropped += 1;
     }
