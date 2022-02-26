@@ -1,6 +1,5 @@
 package be.nayima.blueprint.async.basicjob;
 
-import be.nayima.blueprint.async.basicjob.connector.IExternalParty;
 import be.nayima.blueprint.async.basicjob.mock.MockConfiguration;
 import be.nayima.blueprint.async.basicjob.mock.MockExternalParty;
 import be.nayima.blueprint.async.basicjob.processor.BasicJobSupplier;
@@ -10,9 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Duration;

@@ -22,7 +22,10 @@ spring:
           consumer:
             max-attempts: 1
             concurrency: 1
-            autoBindDlq: false
-            exclusive: true
-            singleActiveConsumer: true
-
+      rabbit:
+        bindings:
+          basicjobsIn:
+            consumer:
+              autoBindDlq: false
+              exclusive: true
+              singleActiveConsumer: true
