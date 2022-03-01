@@ -13,6 +13,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -58,9 +60,9 @@ public class PersistentJobProcessor {
     private int resurrections(MessageHeaders headers) {
         Object xDeath = headers.get("x-death");
         if (xDeath != null) {
-            var deathList = (java.util.List) xDeath;
+            var deathList = (List) xDeath;
             if (deathList.size() > 0) {
-                var deathMap = (java.util.Map) deathList.get(0);
+                var deathMap = (Map) deathList.get(0);
                 var count = deathMap.get("count");
                 var countL = (Long) count;
                 return countL.intValue();

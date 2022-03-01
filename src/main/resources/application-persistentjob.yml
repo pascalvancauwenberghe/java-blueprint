@@ -26,9 +26,10 @@ spring:
           persistentjobProcessor-in-0:
             consumer:
               autoBindDlq: true
+              republishToDlq: false
               expires: 300000
               dlqExpires: 300000
-              dlqTtl: 3000
+              dlqTtl: 10000
               dlqDeadLetterExchange:
 
 
