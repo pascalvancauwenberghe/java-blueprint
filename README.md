@@ -37,7 +37,7 @@ All PersistentJobs have the following properties
     * backOffMaxInterval: 10000
 * After 3 tries, put the message on the DLQ
     * autobindDlq: true 
-* After 5 seconds, bring the message back from DLQ to queue for processing
+* After 3 seconds, bring the message back from DLQ to queue for processing
     * dlqTtl: 3000 
     * dlqDeadLetterExchange:
 * After 3 "resurrections" from DLQ to queue and error is logged and the message is dropped
