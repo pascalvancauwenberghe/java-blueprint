@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 // The BasicJobSupplier creates one BasicJob (via usecase.CreateBasicJob) and puts it on the input queue
 // The binding basicJobsOut must be declared in application.yml
 public class BasicJobSupplier {
-    public static final String OUTPUT_BINDING = "basicjobsOut";
+    public static final String OUTPUT_BINDING = "basicJobSupplier-out-0";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
 
     // StreamBridge should be an interface instead of implementation, so that we can mock it in unit tests
