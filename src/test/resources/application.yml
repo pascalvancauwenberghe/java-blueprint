@@ -3,74 +3,14 @@ spring:
     banner-mode: off
   application:
     name: blueprint
+  profiles:
+    include:
+      - basicjob
+      - persistentjob
   cloud:
     stream:
       function:
         definition: basicjobProcessor;persistentjobProcessor
-      bindings:
-        basicjobsOut:
-          destination: Blueprint.Scheduled.Basic
-          producer:
-            requiredGroups: MyJob
-        basicjobProcessor-in-0:
-          destination: Blueprint.Scheduled.Basic
-          group: MyJob
-          consumer:
-            max-attempts: 1
-            concurrency: 1
-        persistentJobSupplier-out-0:
-          destination: Blueprint.Scheduled.Persistent1
-          producer:
-            requiredGroups: MyJob
-        persistentjobProcessor-in-0:
-          destination: Blueprint.Scheduled.Persistent1
-          group: MyJob
-          consumer:
-            max-attempts: 3
-            concurrency: 1
-            backOffInitialInterval: 2000
-            backOffMaxInterval: 10000
-      rabbit:
-        bindings:
-          basicjobsOut:
-            producer:
-              autobindDlq: false
-              expires: 300000
-              declareExchange: true
-              exchangeAutoDelete: true
-          basicjobProcessor-in-0:
-            consumer:
-              autoBindDlq: false
-              singleActiveConsumer: true
-              expires: 300000
-          persistentJobSupplier-out-0:
-            producer:
-              autobindDlq: true
-              expires: 300000
-              declareExchange: true
-              exchangeAutoDelete: true
-              dlqExpires: 300000
-          persistentjobProcessor-in-0:
-            consumer:
-              autoBindDlq: true
-              expires: 300000
-              dlqExpires: 300000
-              dlqTtl: 3000
-              dlqDeadLetterExchange:
-
-blueprint:
-  basicjob:
-    schedules:
-      basic-job-creation-schedule: "*/2 * * * * *"
-      basic-job-creation-ttl: 1
-      basic-job-batch-creation-schedule: "*/5 * * * * *"
-      basic-job-batch-creation-ttl: 4
-      basic-job-processing-interval: 4
-  persistent:
-    schedules:
-      persistent-job-creation-schedule: "*/2 * * * * *"
-      persistent-job-creation-ttl: 1
-      persistent-job-processing-interval: 4
 
 management:
   endpoints:

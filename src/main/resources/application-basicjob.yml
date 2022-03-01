@@ -1,0 +1,37 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        basicJobSupplier-out-0:
+          destination: Blueprint.Scheduled.Basic
+          producer:
+            requiredGroups: MyJob
+        basicjobProcessor-in-0:
+          destination: Blueprint.Scheduled.Basic
+          group: MyJob
+          consumer:
+            max-attempts: 1
+            concurrency: 1
+      rabbit:
+        bindings:
+          basicJobSupplier-out-0:
+            producer:
+              autobindDlq: false
+              expires: 300000
+              declareExchange: true
+              exchangeAutoDelete: true
+          basicjobProcessor-in-0:
+            consumer:
+              autoBindDlq: false
+              singleActiveConsumer: true
+              expires: 300000
+
+blueprint:
+  basicjob:
+    schedules:
+      basic-job-creation-schedule: "*/2 * * * * *"
+      basic-job-creation-ttl: 1
+      basic-job-batch-creation-schedule: "*/10 * * * * *"
+      basic-job-batch-creation-ttl: 4
+      basic-job-processing-interval: 4
+

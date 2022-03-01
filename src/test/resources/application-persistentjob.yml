@@ -1,0 +1,41 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        persistentJobSupplier-out-0:
+          destination: Blueprint.Scheduled.Persistent
+          producer:
+            requiredGroups: MyJob
+        persistentjobProcessor-in-0:
+          destination: Blueprint.Scheduled.Persistent
+          group: MyJob
+          consumer:
+            max-attempts: 3
+            concurrency: 1
+            backOffInitialInterval: 2000
+            backOffMaxInterval: 10000
+      rabbit:
+        bindings:
+          persistentJobSupplier-out-0:
+            producer:
+              autobindDlq: true
+              expires: 300000
+              declareExchange: true
+              exchangeAutoDelete: true
+              dlqExpires: 300000
+          persistentjobProcessor-in-0:
+            consumer:
+              autoBindDlq: true
+              expires: 300000
+              dlqExpires: 300000
+              dlqTtl: 3000
+              dlqDeadLetterExchange:
+
+
+blueprint:
+  persistent:
+    schedules:
+      persistent-job-creation-schedule: "* */1 * * * *"
+      persistent-job-creation-ttl: 1
+      persistent-job-processing-interval: 4
+
