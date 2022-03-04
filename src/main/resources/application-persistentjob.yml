@@ -22,13 +22,11 @@ spring:
               expires: 300000
               declareExchange: true
               exchangeAutoDelete: true
-              dlqExpires: 300000
           persistentjobProcessor-in-0:
             consumer:
               autoBindDlq: true
               republishToDlq: false
               expires: 300000
-              dlqExpires: 300000
               dlqTtl: 10000
               dlqDeadLetterExchange:
 
