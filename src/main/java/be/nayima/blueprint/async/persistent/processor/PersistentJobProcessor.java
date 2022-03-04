@@ -6,6 +6,7 @@ import be.nayima.blueprint.async.persistent.message.PersistentJob;
 import be.nayima.blueprint.async.persistent.usecase.FailingPartyCaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,12 @@ import java.util.Map;
 @Slf4j
 public class PersistentJobProcessor {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
-    private final FailingPartyCaller usecase;
-    private static int lastReceived = 0;
     private static final int MAX_RESURRECTIONS = 3;
+    public static final String GRAVEYARD = "persistentJobSupplier-graveyard";
+    private static int lastReceived = 0;
+
+    private final FailingPartyCaller usecase;
+    private final StreamBridge streamBridge;
 
     public void process(Message<PersistentJob> msg) {
         var in = msg.getPayload();
@@ -46,13 +50,13 @@ public class PersistentJobProcessor {
             var resurrections = resurrections(headers);
             log.info("FAIL. Message {} processing at {} on attempt {}. {}. Resurrected {} times", in.getCounter(), Instant.now(), deliveryAttempts, ordered(in), resurrections);
 
-            if (resurrections > MAX_RESURRECTIONS) {
-                log.error("Maximum resurrections reached for message #{}. Leaving it in peace", in.getCounter());
+            if (resurrections >= MAX_RESURRECTIONS) {
+                log.error("Maximum resurrections reached for message #{}. Leaving it in peace in the graveyard", in.getCounter());
+                streamBridge.send(GRAVEYARD, msg);
             } else {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     private int attemptsIn(MessageHeaders headers) {
