@@ -38,7 +38,7 @@ public class CircuitBreakerTest {
                 .failureRateThreshold(50)
                 .build();
         CircuitBreakerRegistry registry = CircuitBreakerRegistry.of(config);
-        CircuitBreaker circuitBreaker = registry.circuitBreaker("my");
+        CircuitBreaker circuitBreaker = registry.circuitBreaker("ExternalParty");
         circuitBreaker.getEventPublisher().onCallNotPermitted(event -> {
             notPermitted[0]++;
         });
