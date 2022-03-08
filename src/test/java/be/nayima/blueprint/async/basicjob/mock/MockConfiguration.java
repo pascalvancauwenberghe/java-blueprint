@@ -25,6 +25,7 @@ public class MockConfiguration {
         return externalParty;
     }
 
+
     @Autowired
     public CircuitBreakerRegistry circuitBreakerRegistry;
 }

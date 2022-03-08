@@ -14,7 +14,7 @@ spring:
             concurrency: 1
             backOffInitialInterval: 2000
             backOffMaxInterval: 10000
-        persistentJobSupplier-graveyard:
+        persistentjobProcessor-graveyard:
           destination: Blueprint.Scheduled.Persistent.Graveyard
           producer:
             requiredGroups: MyJob
@@ -32,7 +32,7 @@ spring:
               expires: 300000
               dlqTtl: 3000
               dlqDeadLetterExchange:
-          persistentJobSupplier-graveyard:
+          persistentjobProcessor-graveyard:
             producer:
               autobindDlq: false
               declareExchange: true

@@ -18,10 +18,12 @@ public class PersistentJobCron {
     private final PersistentJobSupplier supplier;
     private final PersistentSchedulingConfig config;
 
+
     // Add one job at a time
     @Scheduled(cron = "${blueprint.persistent.schedules.persistent-job-creation-schedule}")
     public void generateJob() {
         supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(config.getPersistentJobCreationTtl())));
     }
+
 
 }

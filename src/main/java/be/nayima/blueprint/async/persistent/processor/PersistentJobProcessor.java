@@ -24,7 +24,7 @@ import java.util.Map;
 public class PersistentJobProcessor {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
     private static final int MAX_RESURRECTIONS = 3;
-    public static final String GRAVEYARD = "persistentJobSupplier-graveyard";
+    public static final String GRAVEYARD = "persistentjobProcessor-graveyard";
     private static int lastReceived = 0;
 
     private final FailingPartyCaller usecase;
@@ -43,9 +43,6 @@ public class PersistentJobProcessor {
             lastReceived = in.getCounter();
         } catch (CallFailedException e) {
             var headers = msg.getHeaders();
-/*            for (var headername : headers.keySet()) {
-                log.info("Header {}='{}' = {}", headername, headers.get(headername), headers.get(headername).getClass().getName());
-            }*/
             var deliveryAttempts = attemptsIn(headers);
             var resurrections = resurrections(headers);
             log.info("FAIL. Message {} processing at {} on attempt {}. {}. Resurrected {} times", in.getCounter(), Instant.now(), deliveryAttempts, ordered(in), resurrections);

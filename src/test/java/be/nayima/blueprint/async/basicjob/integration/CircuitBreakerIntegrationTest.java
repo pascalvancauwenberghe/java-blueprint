@@ -21,7 +21,7 @@ public class CircuitBreakerIntegrationTest {
     MockConfiguration config;
 
     @Test
-    public void CircuitBreakerAnnotation() {
+    public void hasCircuitBreakerAnnotation() {
         int circuitOpen = 0;
         int succeeded = 0;
         int failed = 0;
@@ -46,5 +46,10 @@ public class CircuitBreakerIntegrationTest {
         var breaker = config.circuitBreakerRegistry.circuitBreaker("ExternalParty");
         Assert.assertNotNull(breaker) ;
         Assert.assertEquals(30,breaker.getCircuitBreakerConfig().getSlidingWindowSize());
+        breaker.executeRunnable(() -> { hopla();});
+    }
+
+    private void hopla() {
+        System.out.println("Hopla");
     }
 }
