@@ -16,4 +16,9 @@ public class MockExternalParty implements IExternalParty {
         messages++;
         return request;
     }
+
+    @Override
+    public int callsMade() {
+        return messages;
+    }
 }

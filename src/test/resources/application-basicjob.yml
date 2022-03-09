@@ -33,5 +33,5 @@ blueprint:
       basic-job-creation-ttl: 1
       basic-job-batch-creation-schedule: "*/10 * * * * *"
       basic-job-batch-creation-ttl: 4
-      basic-job-processing-interval: 4
+      basic-job-processing-interval: 0
 

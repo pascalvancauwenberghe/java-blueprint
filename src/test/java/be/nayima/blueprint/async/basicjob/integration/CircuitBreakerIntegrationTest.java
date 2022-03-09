@@ -3,6 +3,8 @@ package be.nayima.blueprint.async.basicjob.integration;
 import be.nayima.blueprint.async.basicjob.connector.ExternalParty;
 import be.nayima.blueprint.async.basicjob.mock.MockConfiguration;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,21 +13,25 @@ import org.springframework.cloud.stream.binder.test.TestChannelBinderConfigurati
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 @Import({TestChannelBinderConfiguration.class, MockConfiguration.class})
 @ActiveProfiles({"test"})
 public class CircuitBreakerIntegrationTest {
+
     @Autowired
     ExternalParty externalParty;
     @Autowired
-    MockConfiguration config;
+    CircuitBreaker circuitBreaker;
 
     @Test
-    public void hasCircuitBreakerAnnotation() {
+    public void externalPartyHasCircuitBreaker() {
+        final int CALLS = 100;
         int circuitOpen = 0;
         int succeeded = 0;
         int failed = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < CALLS; i++) {
 
             try {
                 externalParty.call("hello");
@@ -36,20 +42,32 @@ public class CircuitBreakerIntegrationTest {
                 failed++;
             }
         }
-        Assert.assertEquals(100, succeeded + failed + circuitOpen);
-        Assert.assertTrue(circuitOpen > 0);
+        assertThat(succeeded + failed + circuitOpen).isEqualTo(CALLS);
+        assertThat(circuitOpen).isGreaterThan(0);
     }
 
     @Test
     public void hasCircuitBreakerForExternalParty() {
-        Assert.assertNotNull(config.circuitBreakerRegistry);
-        var breaker = config.circuitBreakerRegistry.circuitBreaker("ExternalParty");
-        Assert.assertNotNull(breaker) ;
-        Assert.assertEquals(30,breaker.getCircuitBreakerConfig().getSlidingWindowSize());
-        breaker.executeRunnable(() -> { hopla();});
+        Assert.assertNotNull(circuitBreaker);
+        Assert.assertEquals("ExternalParty", circuitBreaker.getName());
+        Assert.assertEquals(30, circuitBreaker.getCircuitBreakerConfig().getSlidingWindowSize());
+        var result = circuitBreaker.executeSupplier(() -> {
+            return hopla();
+        });
+        Assert.assertEquals("Hopla", result);
     }
 
-    private void hopla() {
-        System.out.println("Hopla");
+    private String hopla() {
+        return "Hopla";
+    }
+
+    @Test
+    public void pickingUpConfiguration() {
+        var config = circuitBreaker.getCircuitBreakerConfig() ;
+        // Must match settings from application.yml
+        assertThat(config.getSlidingWindowSize()).isEqualTo(30) ;
+        assertThat(config.getSlidingWindowType()).isEqualTo(CircuitBreakerConfig.SlidingWindowType.TIME_BASED) ;
+        assertThat(config.getMinimumNumberOfCalls()).isEqualTo(5) ;
+        assertThat(config.getFailureRateThreshold()).isEqualTo(10.0f) ;
     }
 }
