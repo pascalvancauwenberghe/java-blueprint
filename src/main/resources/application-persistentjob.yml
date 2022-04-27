@@ -23,14 +23,12 @@ spring:
           persistentJobSupplier-out-0:
             producer:
               autobindDlq: true
-              expires: 300000
-              declareExchange: true
-              exchangeAutoDelete: true
+              dlqTtl: 5000
+              dlqDeadLetterExchange:
           persistentjobProcessor-in-0:
             consumer:
               autoBindDlq: true
-              expires: 300000
-              dlqTtl: 3000
+              dlqTtl: 5000
               dlqDeadLetterExchange:
           persistentjobProcessor-graveyard:
             producer:

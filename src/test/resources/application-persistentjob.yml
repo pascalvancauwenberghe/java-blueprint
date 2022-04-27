@@ -3,11 +3,11 @@ spring:
     stream:
       bindings:
         persistentJobSupplier-out-0:
-          destination: Blueprint.Scheduled.Persistent
+          destination: Blueprint.Test.Scheduled.Persistent
           producer:
             requiredGroups: MyJob
         persistentjobProcessor-in-0:
-          destination: Blueprint.Scheduled.Persistent
+          destination: Blueprint.Test.Scheduled.Persistent
           group: MyJob
           consumer:
             max-attempts: 3
@@ -15,7 +15,7 @@ spring:
             backOffInitialInterval: 2000
             backOffMaxInterval: 10000
         persistentJobSupplier-graveyard:
-          destination: Blueprint.Scheduled.Persistent.Graveyard
+          destination: Blueprint.Test.Scheduled.Persistent.Graveyard
           producer:
             requiredGroups: MyJob
       rabbit:
@@ -23,13 +23,11 @@ spring:
           persistentJobSupplier-out-0:
             producer:
               autobindDlq: true
-              expires: 300000
-              declareExchange: true
-              exchangeAutoDelete: true
+              dlqTtl: 3000
+              dlqDeadLetterExchange:
           persistentjobProcessor-in-0:
             consumer:
               autoBindDlq: true
-              expires: 300000
               dlqTtl: 3000
               dlqDeadLetterExchange:
           persistentJobSupplier-graveyard:

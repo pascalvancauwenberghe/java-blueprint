@@ -17,14 +17,9 @@ spring:
           basicJobSupplier-out-0:
             producer:
               autobindDlq: false
-              expires: 300000
-              declareExchange: true
-              exchangeAutoDelete: true
           basicjobProcessor-in-0:
             consumer:
               autoBindDlq: false
-              singleActiveConsumer: true
-              expires: 300000
 
 blueprint:
   basicjob:
