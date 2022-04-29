@@ -1,16 +1,16 @@
 package be.nayima.blueprint.async.batch.processor;
 
-import be.nayima.blueprint.async.persistent.message.PersistentJob;
+import be.nayima.blueprint.async.batch.message.BatchJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -26,13 +26,13 @@ public class BatchJobSupplier {
     public void supplyJob() {
         var id = counter;
         counter++;
-        var persistentJob = PersistentJob.builder().body(UUID.randomUUID().toString()).counter(id).persistent(id % 2 == 1).expiresAt(Instant.now().plusSeconds(3)).build();
-        sendPersistentJob(persistentJob);
+        var batchJob = new BatchJob(OffsetDateTime.now(), counter);
+        sendBatchJob(batchJob);
     }
 
-    private void sendPersistentJob(PersistentJob job) {
+    private void sendBatchJob(BatchJob job) {
 
-        //log.info("SEND. Message {} done processing at {}.", job.getCounter(), Instant.now());
+        log.info("SEND message in Batch. Message {} created at {}", job.getCounter(), job.getCreatedOn());
         streamBridge.send(OUTPUT_BINDING, job);
     }
 

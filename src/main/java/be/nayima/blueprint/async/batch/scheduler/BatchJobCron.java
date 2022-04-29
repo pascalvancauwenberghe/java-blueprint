@@ -1,5 +1,6 @@
 package be.nayima.blueprint.async.batch.scheduler;
 
+import be.nayima.blueprint.async.batch.processor.BatchJobSupplier;
 import be.nayima.blueprint.async.persistent.processor.PersistentJobSupplier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +16,14 @@ import java.time.Instant;
 @RequiredArgsConstructor
 @Profile({ "!test" })
 public class BatchJobCron {
-    private final PersistentJobSupplier supplier;
+    private final BatchJobSupplier supplier;
     private final BatchSchedulingConfig config;
 
 
     // Add one job at a time
-    @Scheduled(cron = "${blueprint.persistent.schedules.persistent-job-creation-schedule}")
+    @Scheduled(fixedDelay = 60000)
     public void generateJob() {
-        supplier.supplyJob(Instant.now().plus(Duration.ofSeconds(config.getPersistentJobCreationTtl())));
+        supplier.supplyJob();
     }
 
 

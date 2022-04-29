@@ -11,7 +11,7 @@ spring:
   cloud:
     stream:
       function:
-        definition: basicjobProcessor;persistentjobProcessor
+        definition: basicjobProcessor;persistentjobProcessor;batchJobProcessor
 
 management:
   endpoints:
@@ -38,3 +38,6 @@ resilience4j:
         waitDurationInOpenState: 30000
         slowCallDurationThreshold: 30000
         slowCallRateThreshold: 75
+
+server:
+  port : 8081

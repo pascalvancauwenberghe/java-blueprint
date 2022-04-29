@@ -11,6 +11,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ConfigurationProperties(prefix = "blueprint.batch.schedules")
 public class BatchSchedulingConfig {
     // CRON schedule for putting batch jobs onto the queue
-    private String batchJobCreationSchedule;
+    private String batchCreationSchedule;
 
 }

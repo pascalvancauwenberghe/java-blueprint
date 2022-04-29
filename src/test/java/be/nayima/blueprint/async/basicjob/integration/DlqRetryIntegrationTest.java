@@ -7,6 +7,7 @@ import be.nayima.blueprint.async.persistent.processor.PersistentJobProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.amqp.core.Message;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 @ExtendWith(SpringExtension.class)
 @SpringRabbitTest()
 @SpringBootTest(classes = {AsyncBlueprintApplication.class})
