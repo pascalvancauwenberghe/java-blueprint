@@ -7,6 +7,7 @@ spring:
     include:
       - basicjob
       - persistentjob
+      - batch
   cloud:
     stream:
       function:
