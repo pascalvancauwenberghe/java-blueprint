@@ -1,0 +1,44 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        batchJobSupplier-out-0:
+          destination: Blueprint.Scheduled.Batch
+          producer:
+            requiredGroups: MyJob
+        batchJobProcessor-in-0:
+          destination: Blueprint.Scheduled.Batch
+          group: MyJob
+          consumer:
+            batch-mode: true
+            maxAttempts: 1
+            concurrency: 1
+        batchJobProcessor-out-0:
+          destination: Blueprint.Scheduled.BatchResult
+          producer:
+            requiredGroups: MyJob
+      rabbit:
+        bindings:
+          batchJobSupplier-out-0:
+            producer:
+              autobindDlq: true
+              singleActiveConsumer: true
+          batchJobProcessor-in-0:
+            consumer:
+              autoBindDlq: true
+              max-concurrency: 1
+              receive-timeout: 10000
+              enable-batching: true
+              batch-size: 50
+              singleActiveConsumer: true
+          batchJobProcessor-out-0:
+            producer:
+              auto-bind-dlq: true
+              exchange-type: topic
+
+blueprint:
+  batch:
+    schedules:
+      batch-creation-schedule: "* */1 * * * *"
+
+

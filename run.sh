@@ -1,3 +1,3 @@
 clear
 mvn clean package
-java -jar target/asyncblueprint-0.0.1-SNAPSHOT.jar
+java -jar -Dserver.port=8083 target/asyncblueprint-0.0.1-SNAPSHOT.jar
