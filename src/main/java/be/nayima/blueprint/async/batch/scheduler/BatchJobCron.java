@@ -21,7 +21,7 @@ public class BatchJobCron {
 
 
     // Add one job at a time
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 8*1000)
     public void generateJob() {
         supplier.supplyJob();
     }

@@ -22,11 +22,12 @@ spring:
           batchJobSupplier-out-0:
             producer:
               autobindDlq: true
+              singleActiveConsumer: true
           batchJobProcessor-in-0:
             consumer:
               autoBindDlq: true
               max-concurrency: 1
-              receive-timeout: 300000
+              receive-timeout: 10000
               enable-batching: true
               batch-size: 50
               singleActiveConsumer: true
