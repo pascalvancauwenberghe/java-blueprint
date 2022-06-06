@@ -7,10 +7,10 @@ spring:
     include:
       - basicjob
       - persistentjob
-  cloud:
-    stream:
-      function:
-        definition: basicjobProcessor;persistentjobProcessor
+#  cloud:
+#    stream:
+#      function:
+#        definition: basicjobProcessor;persistentjobProcessor
 
 management:
   endpoints:

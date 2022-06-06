@@ -1,39 +1,39 @@
-spring:
-  cloud:
-    stream:
-      bindings:
-        persistentJobSupplier-out-0:
-          destination: Blueprint.Test.Scheduled.Persistent
-          producer:
-            requiredGroups: MyJob
-        persistentjobProcessor-in-0:
-          destination: Blueprint.Test.Scheduled.Persistent
-          group: MyJob
-          consumer:
-            max-attempts: 3
-            concurrency: 1
-            backOffInitialInterval: 2000
-            backOffMaxInterval: 10000
-        persistentJobSupplier-graveyard:
-          destination: Blueprint.Test.Scheduled.Persistent.Graveyard
-          producer:
-            requiredGroups: MyJob
-      rabbit:
-        bindings:
-          persistentJobSupplier-out-0:
-            producer:
-              autobindDlq: true
-              dlqTtl: 3000
-              dlqDeadLetterExchange:
-          persistentjobProcessor-in-0:
-            consumer:
-              autoBindDlq: true
-              dlqTtl: 3000
-              dlqDeadLetterExchange:
-          persistentJobSupplier-graveyard:
-            producer:
-              autobindDlq: false
-              declareExchange: true
+#spring:
+#  cloud:
+#    stream:
+#      bindings:
+#        persistentJobSupplier-out-0:
+#          destination: Blueprint.Test.Scheduled.Persistent
+#          producer:
+#            requiredGroups: MyJob
+#        persistentjobProcessor-in-0:
+#          destination: Blueprint.Test.Scheduled.Persistent
+#          group: MyJob
+#          consumer:
+#            max-attempts: 3
+#            concurrency: 1
+#            backOffInitialInterval: 2000
+#            backOffMaxInterval: 10000
+#        persistentJobSupplier-graveyard:
+#          destination: Blueprint.Test.Scheduled.Persistent.Graveyard
+#          producer:
+#            requiredGroups: MyJob
+#      rabbit:
+#        bindings:
+#          persistentJobSupplier-out-0:
+#            producer:
+#              autobindDlq: true
+#              dlqTtl: 3000
+#              dlqDeadLetterExchange:
+#          persistentjobProcessor-in-0:
+#            consumer:
+#              autoBindDlq: true
+#              dlqTtl: 3000
+#              dlqDeadLetterExchange:
+#          persistentJobSupplier-graveyard:
+#            producer:
+#              autobindDlq: false
+#              declareExchange: true
 
 blueprint:
   persistent:

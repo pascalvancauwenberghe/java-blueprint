@@ -24,7 +24,6 @@ import java.util.Map;
 public class PersistentJobProcessor {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
     private static final int MAX_RESURRECTIONS = 3;
-    public static final String GRAVEYARD = "persistentjobProcessor-graveyard";
     private static int lastReceived = 0;
 
     private final FailingPartyCaller usecase;
@@ -49,7 +48,7 @@ public class PersistentJobProcessor {
 
             if (resurrections >= MAX_RESURRECTIONS) {
                 log.error("Maximum resurrections reached for message #{}. Leaving it in peace in the graveyard", in.getCounter());
-                streamBridge.send(GRAVEYARD, msg);
+                streamBridge.send(PersistentStreamConfig.persistentJobGraveyardProducer.bindingName(), msg);
             } else {
                 throw new RuntimeException(e);
             }
