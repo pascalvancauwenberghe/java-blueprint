@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 @Configuration
 public class BasicJobStreamConfig {
 
-    static QueueDefinition basicJobs = new TransientQueueDefinition("Blueprint.Scheduled.Basic", "MyJob").setMaxAttempts(2).setConcurrency(1);
+    static QueueDefinition basicJobs = new TransientQueueDefinition("Blueprint.Scheduled.Basic", "MyJob").setConcurrency(1);
 
     static final String BASIC_JOB_PRODUCER = "basicJobSupplier";
     public static ProducerDefinition basicJobProducer = new ProducerDefinition(BASIC_JOB_PRODUCER, basicJobs);
@@ -32,7 +32,7 @@ public class BasicJobStreamConfig {
     }
 
     static final String BASIC_JOB_CONSUMER = "basicjobProcessor";
-    public static ConsumerDefinition basicJobConsumer = new ConsumerDefinition(BASIC_JOB_CONSUMER, basicJobs);
+    public static ConsumerDefinition basicJobConsumer = new ConsumerDefinition(BASIC_JOB_CONSUMER, basicJobs).setMaxAttempts(2);
 
     public static List<QueueFunctionDefinition> allFunctions() {
         return List.of(basicJobProducer, basicJobConsumer);
