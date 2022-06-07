@@ -1,8 +1,0 @@
-
-blueprint:
-  persistent:
-    schedules:
-      persistent-job-creation-schedule: "* */1 * * * *"
-      persistent-job-creation-ttl: 1
-      persistent-job-processing-interval: 4
-

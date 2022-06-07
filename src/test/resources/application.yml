@@ -30,3 +30,17 @@ resilience4j:
         waitDurationInOpenState: 30000
         slowCallDurationThreshold: 30000
         slowCallRateThreshold: 75
+
+blueprint:
+  basicjob:
+    schedules:
+      basic-job-creation-schedule: "*/2 * * * * *"
+      basic-job-creation-ttl: 1
+      basic-job-batch-creation-schedule: "*/10 * * * * *"
+      basic-job-batch-creation-ttl: 4
+      basic-job-processing-interval: 0
+  persistent:
+    schedules:
+      persistent-job-creation-schedule: "* */1 * * * *"
+      persistent-job-creation-ttl: 1
+      persistent-job-processing-interval: 4

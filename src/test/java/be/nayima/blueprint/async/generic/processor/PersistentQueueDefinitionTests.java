@@ -107,6 +107,33 @@ public class PersistentQueueDefinitionTests {
     }
 
     @Test
+    public void testConfigureProcessorWithBatch() {
+        var queue = new PersistentQueueDefinition(EXCHANGE_NAME, QUEUE_NAME, Duration.ofMinutes(2)).setConcurrency(5);
+        var consumer = new ConsumerDefinition(PROCESSOR_NAME, queue).setMaxAttempts(2).setBatchMode(50, Duration.ofSeconds(3));
+
+        assertThat(consumer.bindingName()).isEqualTo(PROCESSOR_NAME + "-in-0");
+
+        Properties props = new Properties();
+        consumer.configure(props, false);
+
+        assertThat(props.size()).isEqualTo(14);
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.destination")).isEqualTo(EXCHANGE_NAME);
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.group")).isEqualTo(QUEUE_NAME);
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.max-attempts")).isEqualTo("2");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffInitialInterval")).isEqualTo("1000");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffMaxInterval")).isEqualTo("10000");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffMultiplier")).isEqualTo("2.0");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.concurrency")).isEqualTo("5");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.batchMode")).isEqualTo("true");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.autobindDlq")).isEqualTo("true");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.dlqTtl")).isEqualTo("120000");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.dlqDeadLetterExchange")).isEqualTo("");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.enableBatching")).isEqualTo("true");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.batchSize")).isEqualTo("50");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.receiveTimeout")).isEqualTo("3000");
+    }
+
+    @Test
     public void testConfigureProcessorInTestEnvironment() {
         var queue = new PersistentQueueDefinition(EXCHANGE_NAME, QUEUE_NAME, Duration.ofMinutes(2)).setConcurrency(5);
         var consumer = new ConsumerDefinition(PROCESSOR_NAME, queue).setMaxAttempts(2);

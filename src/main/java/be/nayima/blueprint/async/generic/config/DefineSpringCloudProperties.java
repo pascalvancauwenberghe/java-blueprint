@@ -25,8 +25,7 @@ public abstract class DefineSpringCloudProperties {
 
         var dynFunctions = functionDefinitions.stream().map(QueueFunctionDefinition::processorName).filter(StringUtils::isNotEmpty).collect(Collectors.joining(";"));
 
-        String functions = "batchJobProcessor" + ";" + dynFunctions;
-        props.put("spring.cloud.stream.function.definition", functions);
+        props.put("spring.cloud.stream.function.definition", dynFunctions);
 
         displayGeneratedProperties(props);
 

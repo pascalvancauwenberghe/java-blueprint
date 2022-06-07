@@ -3,11 +3,6 @@ spring:
     banner-mode: off
   application:
     name: blueprint
-  profiles:
-    include:
-      - basicjob
-      - persistentjob
-      - batch
 
 management:
   endpoints:
@@ -38,6 +33,24 @@ resilience4j:
 
 server:
   port : 8081
+
+
+blueprint:
+  basicjob:
+    schedules:
+      basic-job-creation-schedule: "*/2 * * * * *"
+      basic-job-creation-ttl: 1
+      basic-job-batch-creation-schedule: "*/10 * * * * *"
+      basic-job-batch-creation-ttl: 4
+  batch:
+    schedules:
+      basic-job-processing-interval: 4
+      batch-creation-schedule: "* */1 * * * *"
+  persistent:
+    schedules:
+      persistent-job-creation-schedule: "* */1 * * * *"
+      persistent-job-creation-ttl: 1
+      persistent-job-processing-interval: 4
 
 logging.level.org.springframework.web: DEBUG
 
