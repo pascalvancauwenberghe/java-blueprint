@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class BatchJobSupplier {
     private static int counter = 1;
-    public static final String OUTPUT_BINDING = "batchJobSupplier-out-0";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
 
     // StreamBridge should be an interface instead of implementation, so that we can mock it in unit tests
@@ -31,8 +30,9 @@ public class BatchJobSupplier {
 
     private void sendBatchJob(BatchJob job) {
 
-        log.info("SEND message in Batch. Message {} created at {}", job.getCounter(), job.getCreatedOn());
-        streamBridge.send(OUTPUT_BINDING, job);
+        String bindingName = BatchStreamConfig.batchJobProducer.bindingName();
+        log.info("SEND message in Batch to {}. Message {} created at {}", bindingName, job.getCounter(), job.getCreatedOn());
+        streamBridge.send(bindingName, job);
     }
 
 }
