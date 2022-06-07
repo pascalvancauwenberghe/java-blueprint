@@ -11,8 +11,9 @@ public class PersistentQueueDefinition extends QueueDefinition {
         this.retryInterval = retryInterval;
     }
 
-    public void configureConsumer(String processor, String suffix, Properties properties) {
-        super.configureConsumer(processor, suffix, properties);
+    @Override
+    public void configureConsumer(String processor, String suffix, Properties properties, boolean testEnvironment) {
+        super.configureConsumer(processor, suffix, properties, testEnvironment);
 
         String inputBinding = processor + suffix;
 
@@ -21,8 +22,9 @@ public class PersistentQueueDefinition extends QueueDefinition {
         properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + inputBinding + ".consumer.dlqDeadLetterExchange", "");
     }
 
-    public void configureProducer(String supplier, String suffix, Properties properties) {
-        super.configureProducer(supplier, suffix, properties);
+    @Override
+    public void configureProducer(String supplier, String suffix, Properties properties, boolean testEnvironment) {
+        super.configureProducer(supplier, suffix, properties, testEnvironment);
 
         String outputBinding = supplier + suffix;
         properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + outputBinding + ".producer.autobindDlq", "true");

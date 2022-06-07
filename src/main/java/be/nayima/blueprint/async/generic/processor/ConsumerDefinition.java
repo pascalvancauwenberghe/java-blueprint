@@ -35,8 +35,8 @@ public class ConsumerDefinition implements QueueFunctionDefinition {
         return this;
     }
 
-    public void configure(Properties properties) {
-        queueDefinition.configureConsumer(name, suffix, properties);
+    public void configure(Properties properties,boolean testEnvironment) {
+        queueDefinition.configureConsumer(name, suffix, properties,testEnvironment);
 
         properties.put(SPRING_CLOUD_STREAM_BINDINGS + bindingName() + ".consumer.max-attempts", Integer.toString(maxAttempts));
         if (maxAttempts > 1) {

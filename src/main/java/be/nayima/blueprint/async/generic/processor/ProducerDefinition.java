@@ -19,8 +19,8 @@ public class ProducerDefinition implements QueueFunctionDefinition {
         this.suffix = "-" + suffix;
     }
 
-    public void configure(Properties properties) {
-        queueDefinition.configureProducer(name, suffix, properties);
+    public void configure(Properties properties, boolean testEnvironment) {
+        queueDefinition.configureProducer(name, suffix, properties,testEnvironment);
     }
 
     @Override

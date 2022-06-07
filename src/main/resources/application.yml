@@ -8,10 +8,6 @@ spring:
       - basicjob
       - persistentjob
       - batch
-#  cloud:
-#    stream:
-#      function:
-#        definition: basicjobProcessor;persistentjobProcessor;batchJobProcessor
 
 management:
   endpoints:

@@ -1,25 +1,3 @@
-spring:
-  cloud:
-    stream:
-      bindings:
-#        basicJobSupplier-out-0:
-#          destination: Blueprint.Scheduled.Basic
-#          producer:
-#            requiredGroups: MyJob
-#        basicjobProcessor-in-0:
-#          destination: Blueprint.Scheduled.Basic
-#          group: MyJob
-#          consumer:
-#            max-attempts: 1
-#            concurrency: 5
-      rabbit:
-        bindings:
-#          basicJobSupplier-out-0:
-#            producer:
-#              autobindDlq: false
-#          basicjobProcessor-in-0:
-#            consumer:
-#              autoBindDlq: false
 
 blueprint:
   basicjob:

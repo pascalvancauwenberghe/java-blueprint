@@ -10,12 +10,10 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 @Order(Ordered.LOWEST_PRECEDENCE)
 @Slf4j
-public class DynamicProperties implements EnvironmentPostProcessor {
-
+public class TestDynamicProperties implements EnvironmentPostProcessor {
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment,
                                        SpringApplication application) {
-        DefineSpringCloudProperties.setSpringCloudProperties(environment, application, AsyncConfigurations.gatherConfigurations(), false);
+        DefineSpringCloudProperties.setSpringCloudProperties(environment, application, AsyncConfigurations.gatherConfigurations(), true);
     }
-
 }

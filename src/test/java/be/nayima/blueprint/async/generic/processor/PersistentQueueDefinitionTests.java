@@ -23,11 +23,29 @@ public class PersistentQueueDefinitionTests {
         assertThat(producer.bindingName()).isEqualTo(SUPPLIER_NAME + "-out-0");
 
         Properties props = new Properties();
-        producer.configure(props);
+        producer.configure(props, false);
 
         assertThat(props.size()).isEqualTo(5);
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobSupplier-out-0.destination")).isEqualTo(EXCHANGE_NAME);
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobSupplier-out-0.producer.requiredGroups")).isEqualTo(QUEUE_NAME);
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobSupplier-out-0.producer.autobindDlq")).isEqualTo("true");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobSupplier-out-0.producer.dlqTtl")).isEqualTo("3000");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobSupplier-out-0.producer.dlqDeadLetterExchange")).isEqualTo("");
+    }
+
+    @Test
+    public void testConfigureSupplierInTestEnvironment() {
+        var queue = new PersistentQueueDefinition(EXCHANGE_NAME, QUEUE_NAME, Duration.ofSeconds(3)).setConcurrency(1);
+        var producer = new ProducerDefinition(SUPPLIER_NAME, queue);
+
+        assertThat(producer.bindingName()).isEqualTo(SUPPLIER_NAME + "-out-0");
+
+        Properties props = new Properties();
+        producer.configure(props, true);
+
+        assertThat(props.size()).isEqualTo(5);
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobSupplier-out-0.destination")).isEqualTo(EXCHANGE_NAME + ".Test");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobSupplier-out-0.producer.requiredGroups")).isEqualTo(QUEUE_NAME + ".Test");
         assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobSupplier-out-0.producer.autobindDlq")).isEqualTo("true");
         assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobSupplier-out-0.producer.dlqTtl")).isEqualTo("3000");
         assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobSupplier-out-0.producer.dlqDeadLetterExchange")).isEqualTo("");
@@ -41,7 +59,7 @@ public class PersistentQueueDefinitionTests {
         assertThat(producer.bindingName()).isEqualTo(SUPPLIER_NAME + "-out-0");
 
         Properties props = new Properties();
-        producer.configure(props);
+        producer.configure(props, false);
 
         assertThat(props.size()).isEqualTo(6);
         assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobSupplier-out-0.producer.singleActiveConsumer")).isEqualTo("true");
@@ -55,7 +73,7 @@ public class PersistentQueueDefinitionTests {
         assertThat(producer.bindingName()).isEqualTo(SUPPLIER_NAME + "-" + SUFFIX);
 
         Properties props = new Properties();
-        producer.configure(props);
+        producer.configure(props, false);
 
         assertThat(props.size()).isEqualTo(5);
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobSupplier-graveyard.destination")).isEqualTo(EXCHANGE_NAME);
@@ -73,11 +91,34 @@ public class PersistentQueueDefinitionTests {
         assertThat(consumer.bindingName()).isEqualTo(PROCESSOR_NAME + "-in-0");
 
         Properties props = new Properties();
-        consumer.configure(props);
+        consumer.configure(props, false);
 
         assertThat(props.size()).isEqualTo(10);
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.destination")).isEqualTo(EXCHANGE_NAME);
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.group")).isEqualTo(QUEUE_NAME);
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.max-attempts")).isEqualTo("2");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffInitialInterval")).isEqualTo("1000");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffMaxInterval")).isEqualTo("10000");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffMultiplier")).isEqualTo("2.0");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.concurrency")).isEqualTo("5");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.autobindDlq")).isEqualTo("true");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.dlqTtl")).isEqualTo("120000");
+        assertThat(props.getProperty("spring.cloud.stream.rabbit.bindings.basicJobProcessor-in-0.consumer.dlqDeadLetterExchange")).isEqualTo("");
+    }
+
+    @Test
+    public void testConfigureProcessorInTestEnvironment() {
+        var queue = new PersistentQueueDefinition(EXCHANGE_NAME, QUEUE_NAME, Duration.ofMinutes(2)).setConcurrency(5);
+        var consumer = new ConsumerDefinition(PROCESSOR_NAME, queue).setMaxAttempts(2);
+
+        assertThat(consumer.bindingName()).isEqualTo(PROCESSOR_NAME + "-in-0");
+
+        Properties props = new Properties();
+        consumer.configure(props, true);
+
+        assertThat(props.size()).isEqualTo(10);
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.destination")).isEqualTo(EXCHANGE_NAME + ".Test");
+        assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.group")).isEqualTo(QUEUE_NAME + ".Test");
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.max-attempts")).isEqualTo("2");
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffInitialInterval")).isEqualTo("1000");
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.consumer.backOffMaxInterval")).isEqualTo("10000");
@@ -96,7 +137,7 @@ public class PersistentQueueDefinitionTests {
         assertThat(consumer.bindingName()).isEqualTo(PROCESSOR_NAME + "-in-0");
 
         Properties props = new Properties();
-        consumer.configure(props);
+        consumer.configure(props, false);
 
         assertThat(props.size()).isEqualTo(10);
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.destination")).isEqualTo(EXCHANGE_NAME);
@@ -119,7 +160,7 @@ public class PersistentQueueDefinitionTests {
         assertThat(consumer.bindingName()).isEqualTo(PROCESSOR_NAME + "-in-0");
 
         Properties props = new Properties();
-        consumer.configure(props);
+        consumer.configure(props, false);
 
         assertThat(props.size()).isEqualTo(11);
         assertThat(props.getProperty("spring.cloud.stream.bindings.basicJobProcessor-in-0.destination")).isEqualTo(EXCHANGE_NAME);

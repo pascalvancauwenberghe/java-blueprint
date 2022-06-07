@@ -1,10 +1,7 @@
 package be.nayima.blueprint.async.generic.processor;
 
-import lombok.Getter;
-
 import java.util.Properties;
 
-@Getter
 public abstract class QueueDefinition {
     public static String SPRING_CLOUD_STREAM_BINDINGS = "spring.cloud.stream.bindings.";
     public static String SPRING_CLOUD_STREAM_RABBIT_BINDINGS = "spring.cloud.stream.rabbit.bindings.";
@@ -15,13 +12,19 @@ public abstract class QueueDefinition {
     private int concurrency;
     private boolean singleActiveConsumer;
 
-
-
     public QueueDefinition(String exchange, String queue) {
         this.exchange = exchange;
         this.queue = queue;
         this.concurrency = 1;
         this.singleActiveConsumer = false;
+    }
+
+    private String getExchange(boolean testEnvironment) {
+        return exchange + (testEnvironment ? ".Test" : "");
+    }
+
+    private String getQueue(boolean testEnvironment) {
+        return queue + (testEnvironment ? ".Test" : "");
     }
 
     public QueueDefinition setConcurrency(int processors) {
@@ -41,11 +44,11 @@ public abstract class QueueDefinition {
         }
     }
 
-    protected void configureConsumer(String processor, String suffix, Properties properties) {
+    protected void configureConsumer(String processor, String suffix, Properties properties, boolean testEnvironment) {
         validateValues();
         String inputBinding = processor + suffix;
-        properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".destination", getExchange());
-        properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".group", getQueue());
+        properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".destination", getExchange(testEnvironment));
+        properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".group", getQueue(testEnvironment));
         properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".consumer.concurrency", Integer.toString(concurrency));
 
         if (singleActiveConsumer) {
@@ -54,11 +57,12 @@ public abstract class QueueDefinition {
 
     }
 
-    protected void configureProducer(String supplier, String suffix, Properties properties) {
+
+    protected void configureProducer(String supplier, String suffix, Properties properties, boolean testEnvironment) {
         validateValues();
         String outputBinding = supplier + suffix;
-        properties.put(SPRING_CLOUD_STREAM_BINDINGS + outputBinding + ".destination", getExchange());
-        properties.put(SPRING_CLOUD_STREAM_BINDINGS + outputBinding + ".producer.requiredGroups", getQueue());
+        properties.put(SPRING_CLOUD_STREAM_BINDINGS + outputBinding + ".destination", getExchange(testEnvironment));
+        properties.put(SPRING_CLOUD_STREAM_BINDINGS + outputBinding + ".producer.requiredGroups", getQueue(testEnvironment));
         if (singleActiveConsumer) {
             properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + outputBinding + ".producer.singleActiveConsumer", "true");
         }
