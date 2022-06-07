@@ -26,7 +26,7 @@ public class BatchStreamConfig {
     public static ProducerDefinition batchJobProducer = new ProducerDefinition(BATCH_JOB_PRODUCER, batchJobs);
 
     @Bean
-    public Function<List<BatchJob>, Message<BatchResult>> batchJobProcessor(BatchhobProcessor service) {
+    public Function<List<BatchJob>, Message<BatchResult>> batchJobProcessor(BatchProcessor service) {
         return service::process;
     }
 

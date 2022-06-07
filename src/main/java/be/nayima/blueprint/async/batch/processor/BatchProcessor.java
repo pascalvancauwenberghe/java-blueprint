@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BatchhobProcessor {
+public class BatchProcessor {
 
     public Message<BatchResult> process(List<BatchJob> messages) {
         log.info("Received batch of {} messages ", messages.size());
