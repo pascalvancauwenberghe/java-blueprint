@@ -1,5 +1,6 @@
 package be.nayima.blueprint.async.generic.processor;
 
+import java.time.Duration;
 import java.util.Properties;
 
 public abstract class QueueDefinition {
@@ -11,12 +12,14 @@ public abstract class QueueDefinition {
 
     private int concurrency;
     private boolean singleActiveConsumer;
+    private Duration ttl;
 
     public QueueDefinition(String exchange, String queue) {
         this.exchange = exchange;
         this.queue = queue;
         this.concurrency = 1;
         this.singleActiveConsumer = false;
+        this.ttl = null;
     }
 
     private String getExchange(boolean testEnvironment) {
@@ -37,6 +40,10 @@ public abstract class QueueDefinition {
         return this;
     }
 
+    public QueueDefinition setTimeToLive(Duration ttl) {
+        this.ttl = ttl;
+        return this;
+    }
 
     private void validateValues() {
         if (singleActiveConsumer) {
@@ -54,6 +61,9 @@ public abstract class QueueDefinition {
         if (singleActiveConsumer) {
             properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + inputBinding + ".consumer.singleActiveConsumer", "true");
         }
+        if (ttl != null) {
+            properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + inputBinding + ".consumer.ttl", Long.toString(ttl.toMillis()));
+        }
 
     }
 
@@ -66,5 +76,9 @@ public abstract class QueueDefinition {
         if (singleActiveConsumer) {
             properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + outputBinding + ".producer.singleActiveConsumer", "true");
         }
+        if (ttl != null) {
+            properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + outputBinding + ".producer.ttl", Long.toString(ttl.toMillis()));
+        }
+
     }
 }

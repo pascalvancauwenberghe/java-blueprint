@@ -12,13 +12,14 @@ import be.nayima.blueprint.async.generic.processor.TransientQueueDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Configuration
 public class BasicJobStreamConfig {
 
-    static QueueDefinition basicJobs = new TransientQueueDefinition("Blueprint.Scheduled.Basic", "MyJob").setConcurrency(1);
+    static QueueDefinition basicJobs = new TransientQueueDefinition("Blueprint.Scheduled.Basic", "MyJob").setConcurrency(1).setTimeToLive(Duration.ofSeconds(10));
 
     static final String BASIC_JOB_PRODUCER = "basicJobSupplier";
     public static ProducerDefinition basicJobProducer = new ProducerDefinition(BASIC_JOB_PRODUCER, basicJobs);
