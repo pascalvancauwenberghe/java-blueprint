@@ -17,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PersistentJobSupplier {
     private static int counter = 1;
-    public static final String OUTPUT_BINDING = "persistentJobSupplier-out-0";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
 
     // StreamBridge should be an interface instead of implementation, so that we can mock it in unit tests
@@ -33,7 +32,7 @@ public class PersistentJobSupplier {
     private void sendPersistentJob(PersistentJob job) {
 
         //log.info("SEND. Message {} done processing at {}.", job.getCounter(), Instant.now());
-        streamBridge.send(OUTPUT_BINDING, job);
+        streamBridge.send(PersistentStreamConfig.persistentJobProducer.bindingName(), job);
     }
 
 }

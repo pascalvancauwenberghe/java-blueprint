@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 // The BasicJobSupplier creates one BasicJob (via usecase.CreateBasicJob) and puts it on the input queue
 // The binding basicJobsOut must be declared in application.yml
 public class BasicJobSupplier {
-    public static final String OUTPUT_BINDING = "basicJobSupplier-out-0";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneId.from(ZoneOffset.UTC));
 
     // StreamBridge should be an interface instead of implementation, so that we can mock it in unit tests
@@ -37,7 +36,6 @@ public class BasicJobSupplier {
         for (BasicJob job : jobs) {
             sendBasicJob(job, expiresAt);
         }
-
     }
 
     private void sendBasicJob(BasicJob basicJob, Instant expiresAt) {
@@ -46,7 +44,7 @@ public class BasicJobSupplier {
                 .expiresAt(expiresAt)
                 .body(basicJob).build();
         log.info("Sending message {} which expires at {}", job.getName(), formatter.format(job.getExpiresAt()));
-        streamBridge.send(OUTPUT_BINDING, job);
+        streamBridge.send(BasicJobStreamConfig.basicJobProducer.bindingName(), job);
     }
 
 }
