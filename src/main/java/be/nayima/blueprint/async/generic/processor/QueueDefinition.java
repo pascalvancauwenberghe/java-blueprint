@@ -10,14 +10,12 @@ public abstract class QueueDefinition {
     private final String exchange;
     private final String queue;
 
-    private int concurrency;
     private boolean singleActiveConsumer;
     private Duration ttl;
 
     public QueueDefinition(String exchange, String queue) {
         this.exchange = exchange;
         this.queue = queue;
-        this.concurrency = 1;
         this.singleActiveConsumer = false;
         this.ttl = null;
     }
@@ -30,25 +28,21 @@ public abstract class QueueDefinition {
         return queue + (testEnvironment ? ".Test" : "");
     }
 
-    public QueueDefinition setConcurrency(int processors) {
-        this.concurrency = processors;
-        return this;
-    }
-
-    public QueueDefinition setSingleActiveConsumer() {
+    public QueueDefinition withSingleActiveConsumer() {
         this.singleActiveConsumer = true;
         return this;
     }
 
-    public QueueDefinition setTimeToLive(Duration ttl) {
+    public boolean isSingleActiveConsumer() {
+        return this.singleActiveConsumer ;
+    }
+
+    public QueueDefinition withTimeToLive(Duration ttl) {
         this.ttl = ttl;
         return this;
     }
 
     private void validateValues() {
-        if (singleActiveConsumer) {
-            concurrency = 1;
-        }
     }
 
     protected void configureConsumer(String processor, String suffix, Properties properties, boolean testEnvironment) {
@@ -56,7 +50,6 @@ public abstract class QueueDefinition {
         String inputBinding = processor + suffix;
         properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".destination", getExchange(testEnvironment));
         properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".group", getQueue(testEnvironment));
-        properties.put(SPRING_CLOUD_STREAM_BINDINGS + inputBinding + ".consumer.concurrency", Integer.toString(concurrency));
 
         if (singleActiveConsumer) {
             properties.put(SPRING_CLOUD_STREAM_RABBIT_BINDINGS + inputBinding + ".consumer.singleActiveConsumer", "true");

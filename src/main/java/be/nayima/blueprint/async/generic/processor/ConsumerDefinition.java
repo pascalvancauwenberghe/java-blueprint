@@ -18,6 +18,7 @@ public class ConsumerDefinition implements QueueFunctionDefinition {
 
     private int batchSize;
     private Duration receiveTimeout = Duration.ofSeconds(1);
+    private int concurrency  = 1;
 
     public ConsumerDefinition(String name, QueueDefinition queueDefinition) {
         this.name = name;
@@ -25,31 +26,45 @@ public class ConsumerDefinition implements QueueFunctionDefinition {
         this.suffix = "-in-0";
     }
 
-    public ConsumerDefinition setMaxAttempts(int attempts) {
+    public ConsumerDefinition withMaxAttempts(int attempts) {
         this.maxAttempts = attempts;
         return this;
     }
 
-    public ConsumerDefinition setRetrySchedule(Duration backoffInitial, Duration backoffMaximum, double backoffMultiplier) {
+    public ConsumerDefinition withConcurrency(int processors) {
+        this.concurrency = processors;
+        return this;
+    }
+
+    public ConsumerDefinition withRetrySchedule(Duration backoffInitial, Duration backoffMaximum, double backoffMultiplier) {
         this.backoffInitial = backoffInitial;
         this.backoffMaximum = backoffMaximum;
         this.backoffMultiplier = backoffMultiplier;
         return this;
     }
 
-    public ConsumerDefinition setBatchMode(int batchSize, Duration receiveTimeout) {
+    public ConsumerDefinition withBatchMode(int batchSize, Duration receiveTimeout) {
         this.batchSize = batchSize;
         this.receiveTimeout = receiveTimeout;
         return this;
     }
 
+    private void validateValues() {
+        if (queueDefinition.isSingleActiveConsumer()) {
+            concurrency = 1;
+        }
+    }
+
     public void configure(Properties properties, boolean testEnvironment) {
+        validateValues();
         queueDefinition.configureConsumer(name, suffix, properties, testEnvironment);
 
         String streamBindings = SPRING_CLOUD_STREAM_BINDINGS + bindingName();
         String rabbitBindings = SPRING_CLOUD_STREAM_RABBIT_BINDINGS + bindingName();
 
-        properties.put(streamBindings + ".consumer.max-attempts", Integer.toString(maxAttempts));
+        properties.put(streamBindings + ".consumer.concurrency", Integer.toString(concurrency));
+
+        properties.put(streamBindings + ".consumer.maxAttempts", Integer.toString(maxAttempts));
         if (maxAttempts > 1) {
             properties.put(streamBindings + ".consumer.backOffInitialInterval", Long.toString(backoffInitial.toMillis()));
             properties.put(streamBindings + ".consumer.backOffMaxInterval", Long.toString(backoffMaximum.toMillis()));

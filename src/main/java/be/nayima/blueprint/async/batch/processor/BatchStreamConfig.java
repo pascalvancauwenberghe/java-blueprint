@@ -19,8 +19,8 @@ import java.util.function.Function;
 
 @Configuration
 public class BatchStreamConfig {
-    static QueueDefinition batchJobs = new PersistentQueueDefinition("Blueprint.Scheduled.Batch", "MyJob", Duration.ofSeconds(10)).setSingleActiveConsumer();
-    static QueueDefinition batchResult = new TransientQueueDefinition("Blueprint.Scheduled.BatchResult", "MyJob").setConcurrency(1);
+    static QueueDefinition batchJobs = new PersistentQueueDefinition("Blueprint.Scheduled.Batch", "MyJob", Duration.ofSeconds(10)).withSingleActiveConsumer();
+    static QueueDefinition batchResult = new TransientQueueDefinition("Blueprint.Scheduled.BatchResult", "MyJob");
 
     static final String BATCH_JOB_PRODUCER = "batchJobSupplier";
     public static ProducerDefinition batchJobProducer = new ProducerDefinition(BATCH_JOB_PRODUCER, batchJobs);
@@ -31,7 +31,7 @@ public class BatchStreamConfig {
     }
 
     static final String BATCH_JOB_CONSUMER = "batchJobProcessor";
-    public static ConsumerDefinition batchJobProcessor = new ConsumerDefinition(BATCH_JOB_CONSUMER, batchJobs).setMaxAttempts(2).setBatchMode(50, Duration.ofSeconds(10));
+    public static ConsumerDefinition batchJobProcessor = new ConsumerDefinition(BATCH_JOB_CONSUMER, batchJobs).withMaxAttempts(2).withBatchMode(50, Duration.ofSeconds(10)).withConcurrency(1);
     public static ProducerDefinition batchJobResults = new ProducerDefinition(BATCH_JOB_CONSUMER, batchResult);
 
     public static List<QueueFunctionDefinition> allFunctions() {

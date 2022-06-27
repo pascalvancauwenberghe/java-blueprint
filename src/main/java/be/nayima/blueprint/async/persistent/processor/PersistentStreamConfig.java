@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 @Configuration
 public class PersistentStreamConfig {
 
-    static QueueDefinition persistentJobs = new PersistentQueueDefinition("Blueprint.Scheduled.Persistent", "MyJob", Duration.ofSeconds(5)).setConcurrency(1);
+    static QueueDefinition persistentJobs = new PersistentQueueDefinition("Blueprint.Scheduled.Persistent", "MyJob", Duration.ofSeconds(5));
     static QueueDefinition graveyard = new TransientQueueDefinition("Blueprint.Scheduled.Persistent.Graveyard", "MyJob");
 
     static final String PERSISTENT_JOB_PRODUCER = "persistentJobSupplier";
@@ -31,7 +31,7 @@ public class PersistentStreamConfig {
     }
 
     static final String PERSISTENT_JOB_PROCESSOR = "persistentjobProcessor";
-    public static ConsumerDefinition persistentJobConsumer = new ConsumerDefinition(PERSISTENT_JOB_PROCESSOR, persistentJobs).setMaxAttempts(2);
+    public static ConsumerDefinition persistentJobConsumer = new ConsumerDefinition(PERSISTENT_JOB_PROCESSOR, persistentJobs).withMaxAttempts(2).withConcurrency(1);
     public static ProducerDefinition persistentJobGraveyardProducer = new ProducerDefinition(PERSISTENT_JOB_PROCESSOR, graveyard);
 
     public static List<QueueFunctionDefinition> allFunctions() {
